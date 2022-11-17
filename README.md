@@ -1,2 +1,2 @@
-# cse210-06
+# CSE 210-06
 Final Project for CSE 210
