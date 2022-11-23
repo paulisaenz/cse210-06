@@ -44,8 +44,8 @@ _The project files are the following:_
 - +-- video_service.py
 - +-- graphics.py
 - +-- sounds.py
-- +-- point.py
-- +-- color.py
+<!-- - +-- point.py
+- +-- color.py -->
 - +-- README.md
 
 ---
