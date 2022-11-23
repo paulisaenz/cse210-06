@@ -1,10 +1,10 @@
 # CSE 210-06
-Final Project for CSE 210 - Pacman Game
+Final Project for CSE 210 - Pac-Man Game
 
 
 # **Overview:**
 
-- Pacman is a maze action game. The player controls the character through an enclosed maze. The objective of the game is to eat all of the dots placed in the maze while avoiding four colored ghosts.
+- Pac-Man is a maze action game. The player controls the character through an enclosed maze. The objective of the game is to eat all of the dots placed in the maze while avoiding four colored ghosts.
 
 ## **Rules:**
 
