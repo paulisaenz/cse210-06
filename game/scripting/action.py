@@ -1,16 +1,17 @@
 class Action:
     """A thing that is done.
     
-    The responsibility of action is to do somthing that is integral or important in the game. Thus,
-    it has one method, execute(), which should be overridden by derived classes.
+    The responsibility of action is to do something that is important in the game. Thus, it has one
+    method, execute(), which should be overridden by derived classes.
     """
 
-    def execute(self, cast, script):
+    def execute(self, cast, script, callback):
         """Executes something that is important in the game. This method should be overriden by 
         derived classes.
 
         Args:
-            cast (Cast): The cast of Actors in the game.
-            script (Script): The script of Actions in the game.
+            cast: An instance of Cast containing the actors in the game.
+            script: An instance of Script containing the actions in the game.
+            callback: An instance of ActionCallback so we can change the scene.
         """
-        pass
+        raise NotImplementedError("execute not implemented in base class")
