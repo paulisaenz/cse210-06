@@ -7,7 +7,7 @@ from game.casting.brick import Brick
 from game.casting.image import Image
 from game.casting.label import Label
 from game.casting.point import Point
-from game.casting.racket import Racket
+from game.casting.pacman import Pacman
 from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
@@ -15,7 +15,7 @@ from game.scripting.check_over_action import CheckOverAction
 from game.scripting.collide_borders_action import CollideBordersAction
 from game.scripting.collide_brick_action import CollideBrickAction
 from game.scripting.collide_racket_action import CollideRacketAction
-from game.scripting.control_racket_action import ControlRacketAction
+from game.scripting.control_pacman_action import ControlPacmanAction
 from game.scripting.draw_ball_action import DrawBallAction
 from game.scripting.draw_bricks_action import DrawBricksAction
 from game.scripting.draw_dialog_action import DrawDialogAction
@@ -49,7 +49,7 @@ class SceneManager:
     COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
-    CONTROL_RACKET_ACTION = ControlRacketAction(KEYBOARD_SERVICE)
+    CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE)
     DRAW_BALL_ACTION = DrawBallAction(VIDEO_SERVICE)
     DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
@@ -127,7 +127,7 @@ class SceneManager:
         cast.clear_actors(DIALOG_GROUP)
 
         script.clear_actions(INPUT)
-        script.add_action(INPUT, self.CONTROL_RACKET_ACTION)
+        script.add_action(INPUT, self.CONTROL_PACMAN_ACTION)
         self._add_update_script(script)
         self._add_output_script(script)
 
@@ -228,7 +228,7 @@ class SceneManager:
         cast.add_actor(STATS_GROUP, stats)
 
     def _add_racket(self, cast):
-        cast.clear_actors(RACKET_GROUP)
+        cast.clear_actors(PACMAN_GROUP)
         x = CENTER_X - RACKET_WIDTH / 2
         y = SCREEN_HEIGHT - RACKET_HEIGHT
         position = Point(x, y)
@@ -236,8 +236,8 @@ class SceneManager:
         velocity = Point(0, 0)
         body = Body(position, size, velocity)
         animation = Animation(RACKET_IMAGES, RACKET_RATE)
-        racket = Racket(body, animation)
-        cast.add_actor(RACKET_GROUP, racket)
+        pacman = Pacman(body, animation)
+        cast.add_actor(PACMAN_GROUP, pacman)
 
     # ----------------------------------------------------------------------------------------------
     # scripting methods

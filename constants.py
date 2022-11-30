@@ -44,6 +44,8 @@ PURPLE = Color(255, 0, 255)
 # KEYS
 LEFT = "left"
 RIGHT = "right"
+UP = "up"
+DOWN = "down"
 SPACE = "space"
 ENTER = "enter"
 PAUSE = "p"
@@ -99,8 +101,9 @@ BALL_WIDTH = 28
 BALL_HEIGHT = 28
 BALL_VELOCITY = 6
 
-# RACKET
-RACKET_GROUP = "rackets"
+# PACMAN
+PACMAN_GROUP = "pacman"
+#This needs to change - P
 RACKET_IMAGES = [f"cse210-06/assets/images/{n:03}.png" for n in range(100, 103)]
 RACKET_WIDTH = 106
 RACKET_HEIGHT = 28
