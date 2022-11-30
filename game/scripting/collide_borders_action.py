@@ -4,6 +4,7 @@ from game.scripting.action import Action
 
 
 class CollideBordersAction(Action):
+    #We could use this class for the collisions with the maze
 
     def __init__(self, physics_service, audio_service):
         self._physics_service = physics_service

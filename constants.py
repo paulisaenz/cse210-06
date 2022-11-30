@@ -6,7 +6,7 @@ from game.casting.color import Color
 # -------------------------------------------------------------------------------------------------- 
 
 # GAME
-GAME_NAME = "Batter"
+GAME_NAME = "Pac-Man"
 FRAME_RATE = 60
 
 # SCREEN
@@ -22,14 +22,14 @@ FIELD_LEFT = 0
 FIELD_RIGHT = SCREEN_WIDTH
 
 # FONT
-FONT_FILE = "batter/assets/fonts/zorque.otf"
+FONT_FILE = "cse210-06/assets/fonts/zorque.otf"
 FONT_SMALL = 32
 FONT_LARGE = 48
 
 # SOUND
-BOUNCE_SOUND = "batter/assets/sounds/boing.wav"
-WELCOME_SOUND = "batter/assets/sounds/start.wav"
-OVER_SOUND = "batter/assets/sounds/over.wav"
+BOUNCE_SOUND = "cse210-06/assets/sounds/boing.wav"
+WELCOME_SOUND = "cse210-06/assets/sounds/start.wav"
+OVER_SOUND = "cse210-06/assets/sounds/over.wav"
 
 # TEXT
 ALIGN_CENTER = 0
@@ -56,7 +56,7 @@ IN_PLAY = 3
 GAME_OVER = 4
 
 # LEVELS
-LEVEL_FILE = "batter/assets/data/level-{:03}.txt"
+LEVEL_FILE = "cse210-06/assets/data/level-{:03}.txt"
 BASE_LEVELS = 5
 
 # -------------------------------------------------------------------------------------------------- 
@@ -76,6 +76,8 @@ RELEASE = 6
 # CASTING CONSTANTS
 # -------------------------------------------------------------------------------------------------- 
 
+#This constants need to be changed in order to work with Pac-Man
+
 # STATS
 STATS_GROUP = "stats"
 DEFAULT_LIVES = 3
@@ -92,14 +94,14 @@ SCORE_FORMAT = "SCORE: {}"
 
 # BALL
 BALL_GROUP = "balls"
-BALL_IMAGE = "batter/assets/images/000.png"
+BALL_IMAGE = "cse210-06/assets/images/000.png"
 BALL_WIDTH = 28
 BALL_HEIGHT = 28
 BALL_VELOCITY = 6
 
 # RACKET
 RACKET_GROUP = "rackets"
-RACKET_IMAGES = [f"batter/assets/images/{n:03}.png" for n in range(100, 103)]
+RACKET_IMAGES = [f"cse210-06/assets/images/{n:03}.png" for n in range(100, 103)]
 RACKET_WIDTH = 106
 RACKET_HEIGHT = 28
 RACKET_RATE = 6
