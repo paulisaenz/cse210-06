@@ -5,7 +5,7 @@ from game.casting.point import Point
 
 
 class Ghost(Actor):
-    """A solid, spherical object that is bounced around in the game."""
+    """A player that moves around in the game and interacts with PacMan."""
     
     def __init__(self, body, animation, debug = False):
         """Constructs a new Ghost.
@@ -21,7 +21,7 @@ class Ghost(Actor):
         self._animation = self._animations[0]
     
     def get_animation(self):
-        """Gets the bat's animation.
+        """Gets the ghost's animation.
         
         Returns:
             An instance of Animation.
