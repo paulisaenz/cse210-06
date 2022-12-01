@@ -1,13 +1,13 @@
 import csv
 from constants import *
 from game.casting.animation import Animation
-from game.casting.ball import Ball
+from game.casting.ghost import Ghost
 from game.casting.body import Body
 from game.casting.brick import Brick
 from game.casting.image import Image
 from game.casting.label import Label
 from game.casting.point import Point
-from game.casting.pacman import Pacman
+from game.casting.racket import Racket
 from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
@@ -15,7 +15,7 @@ from game.scripting.check_over_action import CheckOverAction
 from game.scripting.collide_borders_action import CollideBordersAction
 from game.scripting.collide_brick_action import CollideBrickAction
 from game.scripting.collide_racket_action import CollideRacketAction
-from game.scripting.control_pacman_action import ControlPacmanAction
+from game.scripting.control_racket_action import ControlRacketAction
 from game.scripting.draw_ball_action import DrawBallAction
 from game.scripting.draw_bricks_action import DrawBricksAction
 from game.scripting.draw_dialog_action import DrawDialogAction
@@ -46,10 +46,10 @@ class SceneManager:
     VIDEO_SERVICE = RaylibVideoService(GAME_NAME, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     CHECK_OVER_ACTION = CheckOverAction()
-    COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
+    # COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
-    COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
-    CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE)
+    # COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
+    CONTROL_RACKET_ACTION = ControlRacketAction(KEYBOARD_SERVICE)
     DRAW_BALL_ACTION = DrawBallAction(VIDEO_SERVICE)
     DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
@@ -88,9 +88,13 @@ class SceneManager:
         self._add_level(cast)
         self._add_lives(cast)
         self._add_score(cast)
-        self._add_ball(cast)
         self._add_bricks(cast)
-        self._add_racket(cast)
+        self._add_background(cast)
+        self._add_racket(cast, Point(210, 425))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
         self._add_dialog(cast, ENTER_TO_START)
 
         self._add_initialize_script(script)
@@ -102,9 +106,13 @@ class SceneManager:
         self._add_release_script(script)
         
     def _prepare_next_level(self, cast, script):
-        self._add_ball(cast)
         self._add_bricks(cast)
-        self._add_racket(cast)
+        self._add_background(cast)
+        self._add_racket(cast, Point(210, 425))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
@@ -113,8 +121,11 @@ class SceneManager:
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, WELCOME_SOUND))
         
     def _prepare_try_again(self, cast, script):
-        self._add_ball(cast)
-        self._add_racket(cast)
+        self._add_racket(cast, Point(210, 425))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
@@ -127,13 +138,16 @@ class SceneManager:
         cast.clear_actors(DIALOG_GROUP)
 
         script.clear_actions(INPUT)
-        script.add_action(INPUT, self.CONTROL_PACMAN_ACTION)
+        script.add_action(INPUT, self.CONTROL_RACKET_ACTION)
         self._add_update_script(script)
         self._add_output_script(script)
 
     def _prepare_game_over(self, cast, script):
-        self._add_ball(cast)
-        self._add_racket(cast)
+        self._add_racket(cast, Point(210, 425))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
         self._add_dialog(cast, WAS_GOOD_GAME)
 
         script.clear_actions(INPUT)
@@ -146,23 +160,29 @@ class SceneManager:
     # ----------------------------------------------------------------------------------------------
     
     def _activate_ball(self, cast):
-        ball = cast.get_first_actor(BALL_GROUP)
-        ball.release()
+        for ghost in cast.get_actors(GHOST_GROUP):
+            ghost.release()
 
-    def _add_ball(self, cast):
-        cast.clear_actors(BALL_GROUP)
-        x = CENTER_X - BALL_WIDTH / 2
-        y = SCREEN_HEIGHT - RACKET_HEIGHT - BALL_HEIGHT  
-        position = Point(x, y)
-        size = Point(BALL_WIDTH, BALL_HEIGHT)
+    def _add_ghost(self, cast, image_group, position):
+        size = Point(GHOST_WIDTH, GHOST_HEIGHT)
         velocity = Point(0, 0)
         body = Body(position, size, velocity)
-        image = Image(BALL_IMAGE)
-        ball = Ball(body, image, True)
-        cast.add_actor(BALL_GROUP, ball)
+        animations = []
+        animations.append(Animation(image_group["up"], GHOST_RATE))
+        animations.append(Animation(image_group["right"], GHOST_RATE))
+        animations.append(Animation(image_group["down"], GHOST_RATE))
+        animations.append(Animation(image_group["left"], GHOST_RATE))
+        ghost = Ghost(body, animations)
+        i = 0
+        for ghosts in cast.get_actors(GHOST_GROUP):
+            if ghosts.get_body().get_position().get_x() == ghost.get_body().get_position().get_x() and ghosts.get_body().get_position().get_y() == ghost.get_body().get_position().get_y():
+                i += 1
+        if i == 0:
+            cast.add_actor(GHOST_GROUP, ghost)
+        
 
     def _add_bricks(self, cast):
-        cast.clear_actors(BRICK_GROUP)
+        cast.clear_actors(WALL_GROUP)
         
         stats = cast.get_first_actor(STATS_GROUP)
         level = stats.get_level() % BASE_LEVELS
@@ -170,29 +190,35 @@ class SceneManager:
 
         with open(filename, 'r') as file:
             reader = csv.reader(file, skipinitialspace=True)
-
             for r, row in enumerate(reader):
-                for c, column in enumerate(row):
+                
+                x, y, width, height = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP, int(row[2]), int(row[3])
+                print(x, y, width, height)
+                position = Point(x, y)
+                size = Point(width, height)
+                velocity = Point(0, 0)
+                image = Image(WALL_IMAGE)
 
-                    x = FIELD_LEFT + c * BRICK_WIDTH
-                    y = FIELD_TOP + r * BRICK_HEIGHT
-                    color = column[0]
-                    frames = int(column[1])
-                    points = BRICK_POINTS 
-                    
-                    if frames == 1:
-                        points *= 2
-                    
-                    position = Point(x, y)
-                    size = Point(BRICK_WIDTH, BRICK_HEIGHT)
-                    velocity = Point(0, 0)
-                    images = BRICK_IMAGES[color][0:frames]
+                body = Body(position, size, velocity)
 
-                    body = Body(position, size, velocity)
-                    animation = Animation(images, BRICK_RATE, BRICK_DELAY)
+                wall = Brick(body, image, 0)
+                cast.add_actor(WALL_GROUP, wall)
+    
+    def _add_background(self, cast):
+        cast.clear_actors(BG_GROUP)
+        x = FIELD_LEFT
+        y = FIELD_TOP
 
-                    brick = Brick(body, animation, points)
-                    cast.add_actor(BRICK_GROUP, brick)
+        position = Point(x, y)
+        size = Point(BG_WIDTH, BG_HEIGHT)
+        velocity = Point(0, 0)
+        image = Image(BG_IMAGE)
+
+        body = Body(position, size, velocity)
+
+        bg = Brick(body, image, 0)
+        cast.add_actor(BG_GROUP, bg)
+
 
     def _add_dialog(self, cast, message):
         cast.clear_actors(DIALOG_GROUP)
@@ -227,16 +253,17 @@ class SceneManager:
         stats = Stats()
         cast.add_actor(STATS_GROUP, stats)
 
-    def _add_racket(self, cast):
+    def _add_racket(self, cast, position):
         cast.clear_actors(PACMAN_GROUP)
-        x = CENTER_X - RACKET_WIDTH / 2
-        y = SCREEN_HEIGHT - RACKET_HEIGHT
-        position = Point(x, y)
-        size = Point(RACKET_WIDTH, RACKET_HEIGHT)
+        size = Point(PACMAN_WIDTH, PACMAN_HEIGHT)
         velocity = Point(0, 0)
         body = Body(position, size, velocity)
-        animation = Animation(RACKET_IMAGES, RACKET_RATE)
-        pacman = Pacman(body, animation)
+        animations = []
+        animations.append(Animation(PACMAN_IMAGES["up"], PACMAN_RATE))
+        animations.append(Animation(PACMAN_IMAGES["right"], PACMAN_RATE))
+        animations.append(Animation(PACMAN_IMAGES["down"], PACMAN_RATE))
+        animations.append(Animation(PACMAN_IMAGES["left"], PACMAN_RATE))
+        pacman = Racket(body, animations)
         cast.add_actor(PACMAN_GROUP, pacman)
 
     # ----------------------------------------------------------------------------------------------
@@ -270,10 +297,10 @@ class SceneManager:
         
     def _add_update_script(self, script):
         script.clear_actions(UPDATE)
-        script.add_action(UPDATE, self.MOVE_BALL_ACTION)
+        # script.add_action(UPDATE, self.MOVE_BALL_ACTION)
         script.add_action(UPDATE, self.MOVE_RACKET_ACTION)
-        script.add_action(UPDATE, self.COLLIDE_BORDERS_ACTION)
+        # script.add_action(UPDATE, self.COLLIDE_BORDERS_ACTION)
         script.add_action(UPDATE, self.COLLIDE_BRICKS_ACTION)
-        script.add_action(UPDATE, self.COLLIDE_RACKET_ACTION)
+        # script.add_action(UPDATE, self.COLLIDE_RACKET_ACTION)
         script.add_action(UPDATE, self.MOVE_RACKET_ACTION)
         script.add_action(UPDATE, self.CHECK_OVER_ACTION)

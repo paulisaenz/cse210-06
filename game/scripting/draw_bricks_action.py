@@ -8,7 +8,7 @@ class DrawBricksAction(Action):
         self._video_service = video_service
         
     def execute(self, cast, script, callback):
-        bricks = cast.get_actors(BRICK_GROUP)
+        bricks = cast.get_actors(WALL_GROUP)
         
         for brick in bricks:
             body = brick.get_body()
@@ -17,7 +17,17 @@ class DrawBricksAction(Action):
                 rectangle = body.get_rectangle()
                 self._video_service.draw_rectangle(rectangle, PURPLE)
                 
-            animation = brick.get_animation()
-            image = animation.next_image()
+            image = brick.get_image()
             position = body.get_position()
             self._video_service.draw_image(image, position)
+
+        bg = cast.get_first_actor(BG_GROUP)
+        body = bg.get_body()
+
+        if bg.is_debug():
+            rectangle = body.get_rectangle()
+            self._video_service.draw_rectangle(rectangle, PURPLE)
+            
+        image = bg.get_image()
+        position = body.get_position()
+        self._video_service.draw_image(image, position)

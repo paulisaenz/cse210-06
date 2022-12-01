@@ -4,7 +4,6 @@ from game.scripting.action import Action
 
 
 class CollideRacketAction(Action):
-    #We could modify this class for the encounter with the big dots
 
     def __init__(self, physics_service, audio_service):
         self._physics_service = physics_service
@@ -18,6 +17,6 @@ class CollideRacketAction(Action):
         racket_body = racket.get_body()
 
         if self._physics_service.has_collided(ball_body, racket_body):
-            ball.bounce_y()
+            ball.move_up()
             sound = Sound(BOUNCE_SOUND)
             self._audio_service.play_sound(sound)    

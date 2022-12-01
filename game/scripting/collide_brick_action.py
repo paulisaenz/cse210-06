@@ -1,28 +1,42 @@
 from constants import *
 from game.casting.sound import Sound
 from game.scripting.action import Action
+from game.casting.point import Point
 
 
 class CollideBrickAction(Action):
-    #We could modify this class for the encounters with the ghosts
 
     def __init__(self, physics_service, audio_service):
         self._physics_service = physics_service
         self._audio_service = audio_service
         
     def execute(self, cast, script, callback):
-        ball = cast.get_first_actor(BALL_GROUP)
-        bricks = cast.get_actors(BRICK_GROUP)
+        pacman = cast.get_first_actor(PACMAN_GROUP)
+        ghosts = cast.get_actors(GHOST_GROUP)
+        walls = cast.get_actors(WALL_GROUP)
         stats = cast.get_first_actor(STATS_GROUP)
         
-        for brick in bricks:
-            ball_body = ball.get_body()
-            brick_body = brick.get_body()
+        for wall in walls:
+            pacman_body = pacman.get_body()
+            pacman_pos = pacman_body.get_position()
 
-            if self._physics_service.has_collided(ball_body, brick_body):
-                ball.bounce_y()
+            wall_body = wall.get_body()
+
+            if self._physics_service.has_collided(pacman_body, wall_body):
                 sound = Sound(BOUNCE_SOUND)
-                self._audio_service.play_sound(sound)
-                points = brick.get_points()
-                stats.add_points(points)
-                cast.remove_actor(BRICK_GROUP, brick)
+                # self._audio_service.play_sound(sound)
+
+                px, py = pacman_pos.get_x(), pacman_pos.get_y()
+
+                if self._physics_service.is_left_of(pacman_body, wall_body):
+                    pacman_body.set_position(Point(px - WALL_THRESHOLD, py))
+
+                elif self._physics_service.is_right_of(pacman_body, wall_body):
+                    pacman_body.set_position(Point(px + WALL_THRESHOLD, py))
+                
+                if self._physics_service.is_below(pacman_body, wall_body):
+                    pacman_body.set_position(Point(px, py + WALL_THRESHOLD))
+                
+                elif self._physics_service.is_above(pacman_body, wall_body):
+                    pacman_body.set_position(Point(px, py - WALL_THRESHOLD))
+

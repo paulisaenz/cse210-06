@@ -4,7 +4,6 @@ from game.scripting.action import Action
 
 
 class CollideBordersAction(Action):
-    #We could use this class for the collisions with the maze
 
     def __init__(self, physics_service, audio_service):
         self._physics_service = physics_service
@@ -20,15 +19,15 @@ class CollideBordersAction(Action):
         over_sound = Sound(OVER_SOUND)
                 
         if x < FIELD_LEFT:
-            ball.bounce_x()
+            # ball.bounce_x()
             self._audio_service.play_sound(bounce_sound)
 
         elif x >= (FIELD_RIGHT - BALL_WIDTH):
-            ball.bounce_x()
+            # ball.bounce_x()
             self._audio_service.play_sound(bounce_sound)
 
         if y < FIELD_TOP:
-            ball.bounce_y()
+            # ball.bounce_y()
             self._audio_service.play_sound(bounce_sound)
 
         elif y >= (FIELD_BOTTOM - BALL_WIDTH):

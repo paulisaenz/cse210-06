@@ -8,13 +8,14 @@ class DrawBallAction(Action):
         self._video_service = video_service
         
     def execute(self, cast, script, callback):
-        ball = cast.get_first_actor(BALL_GROUP)
-        body = ball.get_body()
+        for ghost in cast.get_actors(GHOST_GROUP):
+            body = ghost.get_body()
 
-        if ball.is_debug():
-            rectangle = body.get_rectangle()
-            self._video_service.draw_rectangle(rectangle, PURPLE)
+            if ghost.is_debug():
+                rectangle = body.get_rectangle()
+                self._video_service.draw_rectangle(rectangle, PURPLE)
             
-        image = ball.get_image()
-        position = body.get_position()
-        self._video_service.draw_image(image, position)
+            animation = ghost.get_animation()
+            image = animation.next_image()
+            position = body.get_position()
+            self._video_service.draw_image(image, position)

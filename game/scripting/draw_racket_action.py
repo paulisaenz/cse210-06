@@ -8,14 +8,14 @@ class DrawRacketAction(Action):
         self._video_service = video_service
         
     def execute(self, cast, script, callback):
-        racket = cast.get_first_actor(RACKET_GROUP)
-        body = racket.get_body()
+        pacman = cast.get_first_actor(PACMAN_GROUP)
+        body = pacman.get_body()
 
-        if racket.is_debug():
+        if pacman.is_debug():
             rectangle = body.get_rectangle()
             self._video_service.draw_rectangle(rectangle, PURPLE)
             
-        animation = racket.get_animation()
+        animation = pacman.get_animation()
         image = animation.next_image()
         position = body.get_position()
         self._video_service.draw_image(image, position)
