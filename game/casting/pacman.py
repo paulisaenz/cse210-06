@@ -43,22 +43,22 @@ class Pacman(Actor):
 
     def swing_left(self):
         """Steers PacMan to the left."""
-        velocity = Point(-RACKET_VELOCITY, 0)
+        velocity = Point(-PACMAN_VELOCITY, 0)
         self._body.set_velocity(velocity)
         
     def swing_right(self):
         """Steers PacMan to the right."""
-        velocity = Point(RACKET_VELOCITY, 0)
+        velocity = Point(PACMAN_VELOCITY, 0)
         self._body.set_velocity(velocity)
 
     def swing_up(self):
         """Steers PacMan up."""
-        velocity = Point(RACKET_VELOCITY, 0)
+        velocity = Point(PACMAN_VELOCITY, 0)
         self._body.set_velocity(velocity)
 
     def swing_down(self):
         """Steers PacMan down."""
-        velocity = Point(RACKET_VELOCITY, 0)
+        velocity = Point(PACMAN_VELOCITY, 0)
         self._body.set_velocity(velocity)
     
     def stop_moving(self):
