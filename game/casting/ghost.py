@@ -1,4 +1,4 @@
-import random
+from random import randint 
 from constants import *
 from game.casting.actor import Actor
 from game.casting.point import Point
