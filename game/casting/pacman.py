@@ -18,6 +18,7 @@ class Pacman(Actor):
         self._body = body
         self._animations = animation
         self._animation = self._animations[DIR_RIGHT]
+        self._direction = "right"
 
     def get_animation(self):
         """Gets PacMan's animation.
@@ -45,28 +46,41 @@ class Pacman(Actor):
     def swing_left(self):
         """Steers PacMan to the left."""
         velocity = Point(-PACMAN_VELOCITY, 0)
+        self._direction = "left"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_LEFT]
         
     def swing_right(self):
         """Steers PacMan to the right."""
         velocity = Point(PACMAN_VELOCITY, 0)
+        self._direction = "right"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_RIGHT]
 
     def swing_up(self):
         """Steers PacMan up."""
         velocity = Point(0, -PACMAN_VELOCITY)
+        self._direction = "up"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_UP]
 
     def swing_down(self):
         """Steers PacMan down."""
         velocity = Point(0, PACMAN_VELOCITY)
+        self._direction = "down"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_DOWN]
     
+
     def stop_moving(self):
         """Stops PacMan from moving."""
         velocity = Point(0, 0)
         self._body.set_velocity(velocity)
+
+    def get_direction(self):
+        """Gets the direction of the PacMan.
+        
+        Returns:
+            A string describing the direction of the PacMan.
+        """
+        return self._direction
