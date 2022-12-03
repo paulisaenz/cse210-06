@@ -9,7 +9,7 @@ class ControlPacmanAction(Action):
         
     def execute(self, cast, script, callback):
         pacman = cast.get_first_actor(PACMAN_GROUP)
-        if self._keyboard_service.is_key_down(LEFT): 
+        if self._keyboard_service.is_key_down(LEFT):
             pacman.swing_left()
         elif self._keyboard_service.is_key_down(RIGHT): 
             pacman.swing_right()
@@ -17,5 +17,5 @@ class ControlPacmanAction(Action):
             pacman.swing_up() 
         elif self._keyboard_service.is_key_down(DOWN): 
             pacman.swing_down()  
-        else: 
-            pacman.stop_moving()        
+        # else: 
+        #     pacman.stop_moving()
