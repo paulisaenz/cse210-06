@@ -16,7 +16,8 @@ class Pacman(Actor):
         """
         super().__init__(debug)
         self._body = body
-        self._animation = animation
+        self._animations = animation
+        self._animation = self._animations[DIR_RIGHT]
 
     def get_animation(self):
         """Gets PacMan's animation.
@@ -45,21 +46,25 @@ class Pacman(Actor):
         """Steers PacMan to the left."""
         velocity = Point(-PACMAN_VELOCITY, 0)
         self._body.set_velocity(velocity)
+        self._animation = self._animations[DIR_LEFT]
         
     def swing_right(self):
         """Steers PacMan to the right."""
         velocity = Point(PACMAN_VELOCITY, 0)
         self._body.set_velocity(velocity)
+        self._animation = self._animations[DIR_RIGHT]
 
     def swing_up(self):
         """Steers PacMan up."""
-        velocity = Point(PACMAN_VELOCITY, 0)
+        velocity = Point(0, -PACMAN_VELOCITY)
         self._body.set_velocity(velocity)
+        self._animation = self._animations[DIR_UP]
 
     def swing_down(self):
         """Steers PacMan down."""
-        velocity = Point(PACMAN_VELOCITY, 0)
+        velocity = Point(0, PACMAN_VELOCITY)
         self._body.set_velocity(velocity)
+        self._animation = self._animations[DIR_DOWN]
     
     def stop_moving(self):
         """Stops PacMan from moving."""

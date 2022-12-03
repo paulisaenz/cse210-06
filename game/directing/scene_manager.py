@@ -7,7 +7,7 @@ from game.casting.brick import Brick
 from game.casting.image import Image
 from game.casting.label import Label
 from game.casting.point import Point
-from game.casting.racket import Racket
+from game.casting.pacman import Pacman
 from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
@@ -15,7 +15,7 @@ from game.scripting.check_over_action import CheckOverAction
 from game.scripting.collide_borders_action import CollideBordersAction
 from game.scripting.collide_brick_action import CollideBrickAction
 from game.scripting.collide_racket_action import CollideRacketAction
-from game.scripting.control_racket_action import ControlRacketAction
+from game.scripting.control_pacman_action import ControlPacmanAction
 from game.scripting.draw_ball_action import DrawBallAction
 from game.scripting.draw_bricks_action import DrawBricksAction
 from game.scripting.draw_dialog_action import DrawDialogAction
@@ -25,7 +25,7 @@ from game.scripting.end_drawing_action import EndDrawingAction
 from game.scripting.initialize_devices_action import InitializeDevicesAction
 from game.scripting.load_assets_action import LoadAssetsAction
 from game.scripting.move_ball_action import MoveBallAction
-from game.scripting.move_racket_action import MoveRacketAction
+from game.scripting.move_pacman_action import MovePacmanAction
 from game.scripting.play_sound_action import PlaySoundAction
 from game.scripting.release_devices_action import ReleaseDevicesAction
 from game.scripting.start_drawing_action import StartDrawingAction
@@ -49,7 +49,7 @@ class SceneManager:
     # COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     # COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
-    CONTROL_RACKET_ACTION = ControlRacketAction(KEYBOARD_SERVICE)
+    CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE)
     DRAW_BALL_ACTION = DrawBallAction(VIDEO_SERVICE)
     DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
@@ -59,7 +59,7 @@ class SceneManager:
     INITIALIZE_DEVICES_ACTION = InitializeDevicesAction(AUDIO_SERVICE, VIDEO_SERVICE)
     LOAD_ASSETS_ACTION = LoadAssetsAction(AUDIO_SERVICE, VIDEO_SERVICE)
     MOVE_BALL_ACTION = MoveBallAction()
-    MOVE_RACKET_ACTION = MoveRacketAction()
+    MOVE_PACMAN_ACTION = MovePacmanAction()
     RELEASE_DEVICES_ACTION = ReleaseDevicesAction(AUDIO_SERVICE, VIDEO_SERVICE)
     START_DRAWING_ACTION = StartDrawingAction(VIDEO_SERVICE)
     UNLOAD_ASSETS_ACTION = UnloadAssetsAction(AUDIO_SERVICE, VIDEO_SERVICE)
@@ -88,9 +88,9 @@ class SceneManager:
         self._add_level(cast)
         self._add_lives(cast)
         self._add_score(cast)
-        self._add_bricks(cast)
+        self._add_wall(cast)
         self._add_background(cast)
-        self._add_racket(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 425))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -106,9 +106,9 @@ class SceneManager:
         self._add_release_script(script)
         
     def _prepare_next_level(self, cast, script):
-        self._add_bricks(cast)
+        self._add_wall(cast)
         self._add_background(cast)
-        self._add_racket(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 425))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -121,7 +121,7 @@ class SceneManager:
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, WELCOME_SOUND))
         
     def _prepare_try_again(self, cast, script):
-        self._add_racket(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 425))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -138,12 +138,12 @@ class SceneManager:
         cast.clear_actors(DIALOG_GROUP)
 
         script.clear_actions(INPUT)
-        script.add_action(INPUT, self.CONTROL_RACKET_ACTION)
+        script.add_action(INPUT, self.CONTROL_PACMAN_ACTION)
         self._add_update_script(script)
         self._add_output_script(script)
 
     def _prepare_game_over(self, cast, script):
-        self._add_racket(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 425))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -181,7 +181,7 @@ class SceneManager:
             cast.add_actor(GHOST_GROUP, ghost)
         
 
-    def _add_bricks(self, cast):
+    def _add_wall(self, cast):
         cast.clear_actors(WALL_GROUP)
         
         stats = cast.get_first_actor(STATS_GROUP)
@@ -253,7 +253,7 @@ class SceneManager:
         stats = Stats()
         cast.add_actor(STATS_GROUP, stats)
 
-    def _add_racket(self, cast, position):
+    def _add_pacman(self, cast, position):
         cast.clear_actors(PACMAN_GROUP)
         size = Point(PACMAN_WIDTH, PACMAN_HEIGHT)
         velocity = Point(0, 0)
@@ -263,7 +263,7 @@ class SceneManager:
         animations.append(Animation(PACMAN_IMAGES["right"], PACMAN_RATE))
         animations.append(Animation(PACMAN_IMAGES["down"], PACMAN_RATE))
         animations.append(Animation(PACMAN_IMAGES["left"], PACMAN_RATE))
-        pacman = Racket(body, animations)
+        pacman = Pacman(body, animations)
         cast.add_actor(PACMAN_GROUP, pacman)
 
     # ----------------------------------------------------------------------------------------------
@@ -298,9 +298,9 @@ class SceneManager:
     def _add_update_script(self, script):
         script.clear_actions(UPDATE)
         # script.add_action(UPDATE, self.MOVE_BALL_ACTION)
-        script.add_action(UPDATE, self.MOVE_RACKET_ACTION)
+        script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
         # script.add_action(UPDATE, self.COLLIDE_BORDERS_ACTION)
         script.add_action(UPDATE, self.COLLIDE_BRICKS_ACTION)
         # script.add_action(UPDATE, self.COLLIDE_RACKET_ACTION)
-        script.add_action(UPDATE, self.MOVE_RACKET_ACTION)
+        script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
         script.add_action(UPDATE, self.CHECK_OVER_ACTION)
