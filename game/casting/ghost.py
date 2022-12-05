@@ -19,6 +19,7 @@ class Ghost(Actor):
         self._body = body
         self._animations = animation
         self._animation = self._animations[0]
+        self._direction = "s"
     
     def get_animation(self):
         """Gets the ghost's animation.
@@ -28,27 +29,31 @@ class Ghost(Actor):
         """
         return self._animation
 
-    def move_up(self):
-        """Moves the Ghost up."""
+    def swing_up(self):
+        """Steers the ghost up."""
         velocity = Point(0, -GHOST_VELOCITY)
+        self._direction = "u"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_UP]
 
-    def move_right(self):
-        """Moves PacMan right."""
+    def swing_right(self):
+        """Steers the ghost right."""
         velocity = Point(GHOST_VELOCITY, 0)
+        self._direction = "r"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_RIGHT]
 
-    def move_down(self):
-        """Moves PacMan down."""
+    def swing_down(self):
+        """Steers the ghost down."""
         velocity = Point(0, GHOST_VELOCITY)
+        self._direction = "d"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_DOWN]
         
-    def move_left(self):
-        """Moves PacMan left."""
+    def swing_left(self):
+        """Steers the ghost left."""
         velocity = Point(-GHOST_VELOCITY, 0)
+        self._direction = "l"
         self._body.set_velocity(velocity)
         self._animation = self._animations[DIR_LEFT]
 
@@ -67,7 +72,15 @@ class Ghost(Actor):
             An instance of Image.
         """
         return self._image
+    
+    def get_direction(self):
+        """Gets the direction of the Ghost.
         
+        Returns:
+            A string describing the direction of the Ghost.
+        """
+        return self._direction
+
     def release(self, direction="right"):
         """Release the Ghost in a random direction."""
         if direction == "up":
