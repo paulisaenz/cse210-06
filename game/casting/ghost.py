@@ -80,6 +80,10 @@ class Ghost(Actor):
             A string describing the direction of the Ghost.
         """
         return self._direction
+    
+    def set_direction(self, direction):
+        """Sets the direction of the Ghost."""
+        self._direction = direction
 
     def release(self, direction="right"):
         """Release the Ghost in a random direction."""
