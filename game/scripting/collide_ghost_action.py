@@ -15,11 +15,11 @@ class CollideGhostAction(Action):
         pacman = cast.get_first_actor(PACMAN_GROUP)
         pacman_body = pacman.get_body()
 
-        animations = []
-        animations.append(Animation(EYE_IMAGES["up"], GHOST_RATE))
-        animations.append(Animation(EYE_IMAGES["right"], GHOST_RATE))
-        animations.append(Animation(EYE_IMAGES["down"], GHOST_RATE))
-        animations.append(Animation(EYE_IMAGES["left"], GHOST_RATE))
+        eye_ani = []
+        eye_ani.append(Animation(EYE_IMAGES["up"], GHOST_RATE))
+        eye_ani.append(Animation(EYE_IMAGES["right"], GHOST_RATE))
+        eye_ani.append(Animation(EYE_IMAGES["down"], GHOST_RATE))
+        eye_ani.append(Animation(EYE_IMAGES["left"], GHOST_RATE))
 
         for ghost in ghosts:
             
@@ -30,4 +30,4 @@ class CollideGhostAction(Action):
                     self._audio_service.play_sound(sound)
 
                 ghost.set_state("e")
-                ghost.set_animation(animations)
+                ghost.set_animation(eye_ani)
