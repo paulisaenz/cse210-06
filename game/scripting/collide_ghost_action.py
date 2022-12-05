@@ -25,7 +25,9 @@ class CollideGhostAction(Action):
             
             ghost_body = ghost.get_body()
             if self._physics_service.has_collided(ghost_body, pacman_body):
+                if ghost.get_state() == "g":
+                    sound = Sound(BOUNCE_SOUND)
+                    self._audio_service.play_sound(sound)
+
                 ghost.set_state("e")
                 ghost.set_animation(animations)
-                sound = Sound(BOUNCE_SOUND)
-                self._audio_service.play_sound(sound)
