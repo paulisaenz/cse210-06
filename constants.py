@@ -128,6 +128,13 @@ CLYDE_IMAGES = {
     "left": [f"assets/images/{i:03}.png" for i in range(441,443)]
 }
 
+EYE_IMAGES = {
+    "up": [f"assets/images/511.png"],
+    "right": [f"assets/images/512.png"],
+    "down": [f"assets/images/513.png"],
+    "left": [f"assets/images/514.png"]
+}
+
 # RACKET
 PACMAN_GROUP = "pacman"
 PACMAN_IMAGES = {
