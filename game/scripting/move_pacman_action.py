@@ -22,11 +22,6 @@ class MovePacmanAction(Action):
             position = Point(SCREEN_WIDTH - PACMAN_WIDTH, position.get_y())
         elif x > (SCREEN_WIDTH - PACMAN_WIDTH):
             position = Point(0, position.get_y())
-
-        if y < FIELD_TOP:
-            position = Point(position.get_x(), SCREEN_HEIGHT - PACMAN_HEIGHT)
-        elif y > (SCREEN_HEIGHT - PACMAN_HEIGHT):
-            position = Point(position.get_x(), FIELD_TOP)
             
         body.set_position(position)
         
