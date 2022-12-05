@@ -11,12 +11,26 @@ class ControlGhostAction(Action):
         
     def execute(self, cast, script, callback):
         ghosts = cast.get_actors(GHOST_GROUP)
-        
         for ghost in ghosts:
 
             ghost_body = ghost.get_body()
             direction = ghost.get_direction()
             paths = cast.get_actors(PATH_GROUP)
+
+            if ghost_body.get_position().get_x() == 210 and ghost_body.get_position().get_y() == 229 + FIELD_TOP:
+                self._turn_ghost(ghost, "u")
+                ghost.set_direction("s")
+            if ghost_body.get_position().get_x() == 178 and ghost_body.get_position().get_y() == 229 + FIELD_TOP:
+                self._turn_ghost(ghost, "r")
+                ghost.set_direction("s")
+            if ghost_body.get_position().get_x() == 242 and ghost_body.get_position().get_y() == 229 + FIELD_TOP:
+                self._turn_ghost(ghost, "l")
+                ghost.set_direction("s")
+            if ghost_body.get_position().get_x() == 210 and ghost_body.get_position().get_y() <= 170 + FIELD_TOP and ghost.get_direction() == "s":
+                directions = ["r", "l"]
+                direction = directions[randint(0, len(directions)-1)]
+                print(direction)
+                self._turn_ghost(ghost, direction)
 
             for path in paths:
 
@@ -29,7 +43,6 @@ class ControlGhostAction(Action):
 
                     
                     direction = directions[randint(0, len(directions)-1)]
-                    print(direction)
 
                     self._turn_ghost(ghost, direction)
                     
