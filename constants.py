@@ -128,11 +128,18 @@ CLYDE_IMAGES = {
     "left": [f"assets/images/{i:03}.png" for i in range(441,443)]
 }
 
+SCARED_IMAGES = {
+    "up": [f"assets/images/{i:03}.png" for i in range(511, 513)],
+    "right": [f"assets/images/{i:03}.png" for i in range(511, 513)],
+    "down": [f"assets/images/{i:03}.png" for i in range(511, 513)],
+    "left": [f"assets/images/{i:03}.png" for i in range(511, 513)]
+}
+
 EYE_IMAGES = {
-    "up": [f"assets/images/511.png"],
-    "right": [f"assets/images/512.png"],
-    "down": [f"assets/images/513.png"],
-    "left": [f"assets/images/514.png"]
+    "up": [f"assets/images/611.png"],
+    "right": [f"assets/images/612.png"],
+    "down": [f"assets/images/613.png"],
+    "left": [f"assets/images/614.png"]
 }
 
 # RACKET
