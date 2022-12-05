@@ -2,6 +2,7 @@ import csv
 from constants import *
 from game.casting.animation import Animation
 from game.casting.ghost import Ghost
+from game.casting.cherry import Cherry
 from game.casting.body import Body
 from game.casting.wall import Wall
 from game.casting.path import Path
