@@ -4,6 +4,7 @@ from game.casting.animation import Animation
 from game.casting.ghost import Ghost
 from game.casting.body import Body
 from game.casting.wall import Wall
+from game.casting.path import Path
 from game.casting.image import Image
 from game.casting.label import Label
 from game.casting.point import Point
@@ -12,6 +13,7 @@ from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
 from game.scripting.check_over_action import CheckOverAction
+from game.scripting.collide_borders_action import CollideBordersAction
 from game.scripting.collide_brick_action import CollideBrickAction
 from game.scripting.collide_racket_action import CollideRacketAction
 from game.scripting.control_pacman_action import ControlPacmanAction
@@ -19,7 +21,7 @@ from game.scripting.draw_ball_action import DrawBallAction
 from game.scripting.draw_bricks_action import DrawBricksAction
 from game.scripting.draw_dialog_action import DrawDialogAction
 from game.scripting.draw_hud_action import DrawHudAction
-from game.scripting.draw_racket_action import DrawRacketAction
+from game.scripting.draw_pacman_action import DrawPacmanAction
 from game.scripting.end_drawing_action import EndDrawingAction
 from game.scripting.initialize_devices_action import InitializeDevicesAction
 from game.scripting.load_assets_action import LoadAssetsAction
@@ -45,14 +47,15 @@ class SceneManager:
     VIDEO_SERVICE = RaylibVideoService(GAME_NAME, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     CHECK_OVER_ACTION = CheckOverAction()
+    # COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     # COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
-    CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE)
+    CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE, PHYSICS_SERVICE)
     DRAW_BALL_ACTION = DrawBallAction(VIDEO_SERVICE)
     DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
     DRAW_HUD_ACTION = DrawHudAction(VIDEO_SERVICE)
-    DRAW_RACKET_ACTION= DrawRacketAction(VIDEO_SERVICE)
+    DRAW_RACKET_ACTION= DrawPacmanAction(VIDEO_SERVICE)
     END_DRAWING_ACTION = EndDrawingAction(VIDEO_SERVICE)
     INITIALIZE_DEVICES_ACTION = InitializeDevicesAction(AUDIO_SERVICE, VIDEO_SERVICE)
     LOAD_ASSETS_ACTION = LoadAssetsAction(AUDIO_SERVICE, VIDEO_SERVICE)
@@ -87,6 +90,7 @@ class SceneManager:
         self._add_lives(cast)
         self._add_score(cast)
         self._add_wall(cast)
+        self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
@@ -105,6 +109,7 @@ class SceneManager:
         
     def _prepare_next_level(self, cast, script):
         self._add_wall(cast)
+        self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
@@ -179,6 +184,27 @@ class SceneManager:
             cast.add_actor(GHOST_GROUP, ghost)
         
 
+    def _add_path(self, cast):
+        cast.clear_actors(PATH_GROUP)
+
+        with open(PATH_FILE, 'r') as file:
+            reader = csv.reader(file, skipinitialspace=True)
+            for r, row in enumerate(reader):
+                
+                x, y, direction = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP, str(row[2])
+                directions = []
+                for i in range(len(direction)):
+                    directions.append(direction[i])
+                print(x, y, directions)
+                position = Point(x, y)
+                size = Point(PATH_WIDTH, PATH_HEIGHT)
+                velocity = Point(0, 0)
+
+                body = Body(position, size, velocity)
+
+                path = Path(body, directions)
+                cast.add_actor(PATH_GROUP, path)
+
     def _add_wall(self, cast):
         cast.clear_actors(WALL_GROUP)
         
@@ -191,7 +217,6 @@ class SceneManager:
             for r, row in enumerate(reader):
                 
                 x, y, width, height = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP, int(row[2]), int(row[3])
-                print(x, y, width, height)
                 position = Point(x, y)
                 size = Point(width, height)
                 velocity = Point(0, 0)
@@ -298,7 +323,8 @@ class SceneManager:
         script.clear_actions(UPDATE)
         # script.add_action(UPDATE, self.MOVE_BALL_ACTION)
         script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
-        script.add_action(UPDATE, self.COLLIDE_BRICKS_ACTION)
+        # script.add_action(UPDATE, self.COLLIDE_BORDERS_ACTION)
+        # script.add_action(UPDATE, self.COLLIDE_BRICKS_ACTION)
         # script.add_action(UPDATE, self.COLLIDE_RACKET_ACTION)
         script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
         script.add_action(UPDATE, self.CHECK_OVER_ACTION)

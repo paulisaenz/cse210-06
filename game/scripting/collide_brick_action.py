@@ -14,32 +14,21 @@ class CollideBrickAction(Action):
         pacman = cast.get_first_actor(PACMAN_GROUP)
         pacman_body = pacman.get_body()
         pacman_pos = pacman_body.get_position()
-        px, py = pacman_pos.get_x(), pacman_pos.get_y()
+        pmx, pmy = pacman_pos.get_x(), pacman_pos.get_y()
 
         ghosts = cast.get_actors(GHOST_GROUP)
-        walls = cast.get_actors(WALL_GROUP)
+        paths = cast.get_actors(PATH_GROUP)
         stats = cast.get_first_actor(STATS_GROUP)
         
-        for wall in walls:
+        for path in paths:
 
-            wall_body = wall.get_body()
-
-            if self._physics_service.has_collided(pacman_body, wall_body):
-                sound = Sound(BOUNCE_SOUND)
-                # self._audio_service.play_sound(sound)
+            path_body = path.get_body()
+            path_pos = path_body.get_position()
+            px, py = path_pos.get_x(), path_pos.get_y()
 
 
-                if self._physics_service.is_left_of(pacman_body, wall_body):
-                    pacman_body.set_position(Point(px - WALL_THRESHOLD, py))
-
-                elif self._physics_service.is_right_of(pacman_body, wall_body):
-                    pacman_body.set_position(Point(px + WALL_THRESHOLD, py))
-                
-                if self._physics_service.is_below(pacman_body, wall_body):
-                    pacman_body.set_position(Point(px, py + WALL_THRESHOLD))
-                
-                elif self._physics_service.is_above(pacman_body, wall_body):
-                    pacman_body.set_position(Point(px, py - WALL_THRESHOLD))
-                    
+            if self._physics_service.has_collided(pacman_body, path_body):
                 pacman_body.set_velocity(Point(0, 0))
+                
+                    
 

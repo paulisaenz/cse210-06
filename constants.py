@@ -136,8 +136,8 @@ PACMAN_IMAGES = {
     "down": [f"assets/images/0{n:02}.png" for n in range(31, 35)],
     "left": [f"assets/images/0{n:02}.png" for n in range(41, 45)]
 }
-PACMAN_WIDTH = 28
-PACMAN_HEIGHT = 28
+PACMAN_WIDTH = 2
+PACMAN_HEIGHT = 2
 PACMAN_RATE = 6
 PACMAN_VELOCITY = 1
 
@@ -145,6 +145,11 @@ PACMAN_VELOCITY = 1
 WALL_GROUP = "walls"
 WALL_IMAGE = f"assets/images/blank.png"
 WALL_THRESHOLD = PACMAN_VELOCITY*2
+
+PATH_GROUP = "paths"
+PATH_WIDTH = 2
+PATH_HEIGHT = 2
+PATH_FILE = "assets/data/paths.txt"
 
 BG_GROUP = "background"
 BG_IMAGE = "assets/images/background.png"
