@@ -5,6 +5,7 @@ from game.casting.ghost import Ghost
 from game.casting.cherry import Cherry
 from game.casting.body import Body
 from game.casting.wall import Wall
+from game.casting.pellet import Pellet
 from game.casting.path import Path
 from game.casting.image import Image
 from game.casting.label import Label
@@ -14,12 +15,13 @@ from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
 from game.scripting.check_over_action import CheckOverAction
-from game.scripting.collide_brick_action import CollideBrickAction
+from game.scripting.collide_pellets_action import CollidePelletsAction
 from game.scripting.collide_ghost_action import CollideGhostAction
 from game.scripting.control_pacman_action import ControlPacmanAction
 from game.scripting.control_ghost_action import ControlGhostAction
 from game.scripting.draw_ghost_action import DrawGhostAction
 from game.scripting.draw_bricks_action import DrawBricksAction
+from game.scripting.draw_pellets_action import DrawPelletsAction
 from game.scripting.draw_dialog_action import DrawDialogAction
 from game.scripting.draw_hud_action import DrawHudAction
 from game.scripting.draw_pacman_action import DrawPacmanAction
@@ -48,12 +50,13 @@ class SceneManager:
     VIDEO_SERVICE = RaylibVideoService(GAME_NAME, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     CHECK_OVER_ACTION = CheckOverAction()
-    COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
+    COLLIDE_PELLETS_ACTION = CollidePelletsAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_GHOST_ACTION = CollideGhostAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE, PHYSICS_SERVICE)
     CONTROL_GHOST_ACTION = ControlGhostAction(PHYSICS_SERVICE)
     DRAW_GHOST_ACTION = DrawGhostAction(VIDEO_SERVICE)
     DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
+    DRAW_PELLETS_ACTION = DrawPelletsAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
     DRAW_HUD_ACTION = DrawHudAction(VIDEO_SERVICE)
     DRAW_PACMAN_ACTION= DrawPacmanAction(VIDEO_SERVICE)
@@ -91,6 +94,7 @@ class SceneManager:
         self._add_lives(cast)
         self._add_score(cast)
         self._add_wall(cast)
+        self._add_pellet(cast)
         self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
@@ -110,6 +114,7 @@ class SceneManager:
         
     def _prepare_next_level(self, cast, script):
         self._add_wall(cast)
+        self._add_pellet(cast)
         self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
@@ -229,6 +234,25 @@ class SceneManager:
                 wall = Wall(body, image, 0)
                 cast.add_actor(WALL_GROUP, wall)
     
+    def _add_pellet(self, cast):
+        cast.clear_actors(PELLET_GROUP)
+
+        with open(PELLET_FILE, 'r') as file:
+            reader = csv.reader(file, skipinitialspace=True)
+            for r, row in enumerate(reader):
+                
+                x, y = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP
+                position = Point(x, y)
+                size = Point(PELLET_WIDTH, PELLET_HEIGHT)
+                velocity = Point(0, 0)
+                image = Image(PELLET_IMAGE)
+
+                body = Body(position, size, velocity)
+                points = PELLET_POINTS
+
+                pellet = Pellet(body, image, points)
+                cast.add_actor(PELLET_GROUP, pellet)
+    
     def _add_background(self, cast):
         cast.clear_actors(BG_GROUP)
         x = FIELD_LEFT
@@ -309,6 +333,7 @@ class SceneManager:
         script.add_action(OUTPUT, self.DRAW_HUD_ACTION)
         script.add_action(OUTPUT, self.DRAW_GHOST_ACTION)
         script.add_action(OUTPUT, self.DRAW_BRICKS_ACTION)
+        script.add_action(OUTPUT, self.DRAW_PELLETS_ACTION)
         script.add_action(OUTPUT, self.DRAW_PACMAN_ACTION)
         script.add_action(OUTPUT, self.DRAW_DIALOG_ACTION)
         script.add_action(OUTPUT, self.END_DRAWING_ACTION)
@@ -328,4 +353,5 @@ class SceneManager:
         script.add_action(UPDATE, self.CONTROL_GHOST_ACTION)
         script.add_action(UPDATE, self.MOVE_GHOST_ACTION)
         script.add_action(UPDATE, self.COLLIDE_GHOST_ACTION)
+        script.add_action(UPDATE, self.COLLIDE_PELLETS_ACTION)
         script.add_action(UPDATE, self.CHECK_OVER_ACTION)

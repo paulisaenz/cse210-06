@@ -160,6 +160,13 @@ WALL_GROUP = "walls"
 WALL_IMAGE = f"assets/images/blank.png"
 WALL_THRESHOLD = PACMAN_VELOCITY*2
 
+PELLET_GROUP = "pellets"
+PELLET_FILE = "assets/data/pellets.txt"
+PELLET_IMAGE = f"assets/images/pellet.png"
+PELLET_WIDTH = 2
+PELLET_HEIGHT = 2
+PELLET_POINTS = 10
+
 PATH_GROUP = "paths"
 PATH_WIDTH = 2
 PATH_HEIGHT = 2
