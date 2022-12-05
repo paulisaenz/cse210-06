@@ -192,7 +192,8 @@ class SceneManager:
             reader = csv.reader(file, skipinitialspace=True)
             for r, row in enumerate(reader):
                 
-                x, y, direction = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP, str(row[2])
+                number = int(row[0])
+                x, y, direction = int(row[1]) + FIELD_LEFT, int(row[2]) + FIELD_TOP, str(row[3])
                 directions = []
                 for i in range(len(direction)):
                     directions.append(direction[i])
@@ -202,7 +203,7 @@ class SceneManager:
 
                 body = Body(position, size, velocity)
 
-                path = Path(body, directions)
+                path = Path(body, directions, number)
                 cast.add_actor(PATH_GROUP, path)
 
     def _add_wall(self, cast):
@@ -322,6 +323,7 @@ class SceneManager:
     def _add_update_script(self, script):
         script.clear_actions(UPDATE)
         script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
+        script.add_action(UPDATE, self.COLLIDE_GHOST_ACTION)
         script.add_action(UPDATE, self.CONTROL_GHOST_ACTION)
         script.add_action(UPDATE, self.MOVE_GHOST_ACTION)
         script.add_action(UPDATE, self.COLLIDE_GHOST_ACTION)
