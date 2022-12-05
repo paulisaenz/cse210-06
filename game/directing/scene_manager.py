@@ -91,10 +91,10 @@ class SceneManager:
         self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
-        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
-        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
-        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
-        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 170))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 229))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 229))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 229))
         self._add_dialog(cast, ENTER_TO_START)
 
         self._add_initialize_script(script)
@@ -110,10 +110,10 @@ class SceneManager:
         self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
-        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
-        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
-        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
-        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 170))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 229))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 229))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 229))
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
@@ -123,10 +123,10 @@ class SceneManager:
         
     def _prepare_try_again(self, cast, script):
         self._add_pacman(cast, Point(210, 362))
-        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
-        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
-        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
-        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 170))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 229))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 229))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 229))
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
         script.clear_actions(INPUT)
@@ -145,10 +145,10 @@ class SceneManager:
 
     def _prepare_game_over(self, cast, script):
         self._add_pacman(cast, Point(210, 362))
-        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
-        self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
-        self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
-        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 289))
+        self._add_ghost(cast, BLINKY_IMAGES, Point(210, 170))
+        self._add_ghost(cast, PINKY_IMAGES, Point(210, 229))
+        self._add_ghost(cast, INKY_IMAGES, Point(178, 229))
+        self._add_ghost(cast, CLYDE_IMAGES, Point(242, 229))
         self._add_dialog(cast, WAS_GOOD_GAME)
 
         script.clear_actions(INPUT)
@@ -164,9 +164,10 @@ class SceneManager:
         for ghost in cast.get_actors(GHOST_GROUP):
             ghost.release()
 
-    def _add_ghost(self, cast, image_group, position):
+    def _add_ghost(self, cast, image_group, pos):
         size = Point(GHOST_WIDTH, GHOST_HEIGHT)
         velocity = Point(0, 0)
+        position = Point(pos.get_x() + FIELD_LEFT, pos.get_y() + FIELD_TOP)
         body = Body(position, size, velocity)
         animations = []
         animations.append(Animation(image_group["up"], GHOST_RATE))
