@@ -29,7 +29,6 @@ class ControlGhostAction(Action):
             if ghost_body.get_position().get_x() == 210 and ghost_body.get_position().get_y() <= 170 + FIELD_TOP and ghost.get_direction() == "s":
                 directions = ["r", "l"]
                 direction = directions[randint(0, len(directions)-1)]
-                print(direction)
                 self._turn_ghost(ghost, direction)
 
             for path in paths:

@@ -194,7 +194,6 @@ class SceneManager:
                 directions = []
                 for i in range(len(direction)):
                     directions.append(direction[i])
-                print(x, y, directions)
                 position = Point(x, y)
                 size = Point(PATH_WIDTH, PATH_HEIGHT)
                 velocity = Point(0, 0)
