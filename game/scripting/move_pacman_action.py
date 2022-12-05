@@ -14,7 +14,6 @@ class MovePacmanAction(Action):
         velocity = body.get_velocity()
         position = body.get_position()
         x = position.get_x()
-        y = position.get_y()
         
         position = position.add(velocity)
 

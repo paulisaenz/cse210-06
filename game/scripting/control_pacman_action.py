@@ -54,5 +54,3 @@ class ControlPacmanAction(Action):
                 pacman.swing_right()
             if self._keyboard_service.is_key_down(LEFT):
                 pacman.swing_left()
-
-            
