@@ -139,12 +139,12 @@ PACMAN_IMAGES = {
 PACMAN_WIDTH = 28
 PACMAN_HEIGHT = 28
 PACMAN_RATE = 6
-PACMAN_VELOCITY = 2
+PACMAN_VELOCITY = 1
 
 # BRICK
 WALL_GROUP = "walls"
 WALL_IMAGE = f"assets/images/blank.png"
-WALL_THRESHOLD = 4
+WALL_THRESHOLD = PACMAN_VELOCITY*2
 
 BG_GROUP = "background"
 BG_IMAGE = "assets/images/background.png"

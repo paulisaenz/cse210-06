@@ -3,7 +3,7 @@ from constants import *
 from game.casting.animation import Animation
 from game.casting.ghost import Ghost
 from game.casting.body import Body
-from game.casting.brick import Brick
+from game.casting.wall import Wall
 from game.casting.image import Image
 from game.casting.label import Label
 from game.casting.point import Point
@@ -12,7 +12,6 @@ from game.casting.stats import Stats
 from game.casting.text import Text 
 from game.scripting.change_scene_action import ChangeSceneAction
 from game.scripting.check_over_action import CheckOverAction
-from game.scripting.collide_borders_action import CollideBordersAction
 from game.scripting.collide_brick_action import CollideBrickAction
 from game.scripting.collide_racket_action import CollideRacketAction
 from game.scripting.control_pacman_action import ControlPacmanAction
@@ -46,7 +45,6 @@ class SceneManager:
     VIDEO_SERVICE = RaylibVideoService(GAME_NAME, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     CHECK_OVER_ACTION = CheckOverAction()
-    # COLLIDE_BORDERS_ACTION = CollideBordersAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     COLLIDE_BRICKS_ACTION = CollideBrickAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     # COLLIDE_RACKET_ACTION = CollideRacketAction(PHYSICS_SERVICE, AUDIO_SERVICE)
     CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE)
@@ -90,7 +88,7 @@ class SceneManager:
         self._add_score(cast)
         self._add_wall(cast)
         self._add_background(cast)
-        self._add_pacman(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -108,7 +106,7 @@ class SceneManager:
     def _prepare_next_level(self, cast, script):
         self._add_wall(cast)
         self._add_background(cast)
-        self._add_pacman(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -121,7 +119,7 @@ class SceneManager:
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, WELCOME_SOUND))
         
     def _prepare_try_again(self, cast, script):
-        self._add_pacman(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -143,7 +141,7 @@ class SceneManager:
         self._add_output_script(script)
 
     def _prepare_game_over(self, cast, script):
-        self._add_pacman(cast, Point(210, 425))
+        self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, BLINKY_IMAGES, Point(210, 230))
         self._add_ghost(cast, PINKY_IMAGES, Point(210, 289))
         self._add_ghost(cast, INKY_IMAGES, Point(178, 289))
@@ -201,7 +199,7 @@ class SceneManager:
 
                 body = Body(position, size, velocity)
 
-                wall = Brick(body, image, 0)
+                wall = Wall(body, image, 0)
                 cast.add_actor(WALL_GROUP, wall)
     
     def _add_background(self, cast):
@@ -216,7 +214,7 @@ class SceneManager:
 
         body = Body(position, size, velocity)
 
-        bg = Brick(body, image, 0)
+        bg = Wall(body, image, 0)
         cast.add_actor(BG_GROUP, bg)
 
 
@@ -253,10 +251,11 @@ class SceneManager:
         stats = Stats()
         cast.add_actor(STATS_GROUP, stats)
 
-    def _add_pacman(self, cast, position):
+    def _add_pacman(self, cast, pos):
         cast.clear_actors(PACMAN_GROUP)
         size = Point(PACMAN_WIDTH, PACMAN_HEIGHT)
         velocity = Point(0, 0)
+        position = Point(pos.get_x() + FIELD_LEFT, pos.get_y() + FIELD_TOP)
         body = Body(position, size, velocity)
         animations = []
         animations.append(Animation(PACMAN_IMAGES["up"], PACMAN_RATE))
@@ -299,7 +298,6 @@ class SceneManager:
         script.clear_actions(UPDATE)
         # script.add_action(UPDATE, self.MOVE_BALL_ACTION)
         script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
-        # script.add_action(UPDATE, self.COLLIDE_BORDERS_ACTION)
         script.add_action(UPDATE, self.COLLIDE_BRICKS_ACTION)
         # script.add_action(UPDATE, self.COLLIDE_RACKET_ACTION)
         script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
