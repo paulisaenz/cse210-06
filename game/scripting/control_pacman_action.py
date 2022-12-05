@@ -22,7 +22,8 @@ class ControlPacmanAction(Action):
 
 
             if self._physics_service.has_collided(pacman_body, path_body):
-                pacman_body.set_velocity(Point(0, 0))
+                if direction not in directions:
+                    pacman_body.set_velocity(Point(0, 0))
                 if "u" in directions:
                     if self._keyboard_service.is_key_down(UP): 
                         pacman.swing_up() 
@@ -36,16 +37,22 @@ class ControlPacmanAction(Action):
                     if self._keyboard_service.is_key_down(LEFT):
                         pacman.swing_left()
         
-        if direction == "up":
+        if direction == "u":
             if self._keyboard_service.is_key_down(DOWN): 
                 pacman.swing_down()
-        elif direction == "right":
+        elif direction == "r":
             if self._keyboard_service.is_key_down(LEFT):
                 pacman.swing_left()
-        elif direction == "down":
+        elif direction == "d":
             if self._keyboard_service.is_key_down(UP): 
                 pacman.swing_up()
-        elif direction == "left":
+        elif direction == "l":
             if self._keyboard_service.is_key_down(RIGHT):
                 pacman.swing_right()
+        elif direction == "s":
+            if self._keyboard_service.is_key_down(RIGHT):
+                pacman.swing_right()
+            if self._keyboard_service.is_key_down(LEFT):
+                pacman.swing_left()
+
             
