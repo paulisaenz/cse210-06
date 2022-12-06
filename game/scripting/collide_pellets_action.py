@@ -16,12 +16,14 @@ class CollidePelletsAction(Action):
 
         pellets = cast.get_actors(PELLET_GROUP)
         stats = cast.get_first_actor(STATS_GROUP)
+        chomp_sound = Sound(CHOMP_SOUND)
         
         for pellet in pellets:
 
             path_body = pellet.get_body()
 
             if self._physics_service.has_collided(pacman_body, path_body):
+                self._audio_service.play_sound(chomp_sound)
                 cast.remove_actor(PELLET_GROUP, pellet)
                 
                     

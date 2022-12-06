@@ -28,6 +28,7 @@ FONT_LARGE = 48
 
 # SOUND
 BOUNCE_SOUND = "assets/sounds/boing.wav"
+CHOMP_SOUND = "assets/sounds/credit.wav"
 WELCOME_SOUND = "assets/sounds/start.wav"
 OVER_SOUND = "assets/sounds/over.wav"
 
