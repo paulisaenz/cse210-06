@@ -38,6 +38,7 @@ class CollidePelletsAction(Action):
                 if pellet.get_points() == POWER_PELLET_POINTS:
                     for ghost in ghosts:
                         ghost.set_animation(scared_ani)
+                        ghost.set_state("s")
                 
                     
 
