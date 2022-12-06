@@ -18,7 +18,8 @@ class CollidePelletsAction(Action):
         pellets = cast.get_actors(PELLET_GROUP)
         stats = cast.get_first_actor(STATS_GROUP)
         chomp_sound = Sound(CHOMP_SOUND)
-
+        power_pellet_sound = Sound(POWER_PELLET_SOUND)
+        
         ghosts = cast.get_actors(GHOST_GROUP)
         scared_ani = []
         scared_ani.append(Animation(SCARED_IMAGES["up"], GHOST_RATE))
@@ -31,15 +32,17 @@ class CollidePelletsAction(Action):
             path_body = pellet.get_body()
 
             if self._physics_service.has_collided(pacman_body, path_body):
-                self._audio_service.play_sound(chomp_sound)
-                stats.add_points(PELLET_POINTS)
-                cast.remove_actor(PELLET_GROUP, pellet)
 
                 if pellet.get_points() == POWER_PELLET_POINTS:
+                    self._audio_service.play_sound(power_pellet_sound)
+                    stats.add_points(POWER_PELLET_POINTS)
                     for ghost in ghosts:
                         if ghost.get_state() != "dead":
                             ghost.set_animation(scared_ani)
                             ghost.set_state("scared")
-                
+                else:
+                    self._audio_service.play_sound(chomp_sound)
+                    stats.add_points(PELLET_POINTS)
                     
+                cast.remove_actor(PELLET_GROUP, pellet)
 
