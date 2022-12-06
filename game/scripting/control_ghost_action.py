@@ -84,7 +84,10 @@ class ControlGhostAction(Action):
                                 ghost.set_animation(clyed_ani)
 
                             self._turn_ghost(ghost, "u")
-                            ghost.set_state("start")
+                            ghost.set_state("ghost")
+                        
+                        elif path.get_number() == 90 and ghost.get_state() == "start":
+                            ghost.set_state("ghost")
                         else:
                             if ghost.get_state() == "dead":
                                 if path.get_number() in [37, 49, 56]:
@@ -98,7 +101,6 @@ class ControlGhostAction(Action):
                                 direction = directions[randint(0, len(directions)-1)]
                                 while self._is_opposite(prev_direction, direction):
                                     direction = directions[randint(0, len(directions)-1)]
-                            print(prev_direction, direction)
                             self._turn_ghost(ghost, direction)
                             
                             if direction not in directions:
