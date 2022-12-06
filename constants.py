@@ -100,6 +100,7 @@ GHOST_WIDTH = 2
 GHOST_HEIGHT = 2
 GHOST_RATE = 6
 GHOST_VELOCITY = 2
+GHOST_POINTS = 200
 
 BLINKY_IMAGES = {
     "up": [f"assets/images/{n:02}.png" for n in range(111,113)],
