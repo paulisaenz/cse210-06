@@ -27,11 +27,11 @@ class CollideGhostAction(Action):
             
             ghost_body = ghost.get_body()
             if self._physics_service.has_collided(ghost_body, pacman_body):
-                if ghost.get_state() == "s":
+                if ghost.get_state() == "scared":
                     sound = Sound(BOUNCE_SOUND)
                     self._audio_service.play_sound(sound)
                     stats.add_points(GHOST_POINTS)
-                    ghost.set_state("e")
+                    ghost.set_state("dead")
                     ghost.set_animation(eye_ani)
-                elif ghost.get_state() == "g":
+                elif ghost.get_state() == "ghost":
                     stats.lose_life()
