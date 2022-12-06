@@ -128,7 +128,7 @@ class Ghost(Actor):
         """Sets the direction of the ghost."""
         self._direction = direction
 
-    def release(self, direction="right"):
+    def release(self, direction=""):
         """Release the Ghost in a given direction."""
         if direction == "up":
             velocity = Point(0, -GHOST_VELOCITY)
@@ -142,5 +142,8 @@ class Ghost(Actor):
         elif direction == "left":
             velocity = Point(-GHOST_VELOCITY, 0)
             self._animation = self._animations[DIR_LEFT]
+        else: 
+            velocity = self._body.get_velocity()
+            self._animation = self._animations[DIR_RIGHT]
             
         self._body.set_velocity(velocity)
