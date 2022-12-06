@@ -41,67 +41,68 @@ class ControlGhostAction(Action):
             direction = ghost.get_direction()
             paths = cast.get_actors(PATH_GROUP)
             target = None
+            
+            if ghost.get_state() != "wait":
+                if ghost_x == 178 and ghost_y == 229 + FIELD_TOP:
+                    self._turn_ghost(ghost, "r")
+                    ghost.set_state("start")
 
-            if ghost_x == 178 and ghost_y == 229 + FIELD_TOP:
-                self._turn_ghost(ghost, "r")
-                ghost.set_direction("s")
-
-            if ghost_x == 242 and ghost_y == 229 + FIELD_TOP:
-                self._turn_ghost(ghost, "l")
-                ghost.set_direction("s")
-                        
-            if ghost.get_state() == "e":
-                target = Point(210, 170 + FIELD_TOP)
-                travel_x = ghost_x - target.get_x()
-                travel_y = ghost_y - target.get_y()
-
-            for path in paths:
-
-                path_body = path.get_body()
-                directions = path.get_directions()
-
-                if self._physics_service.has_collided(ghost_body, path_body):
-                    prev_direction = direction
-
-                    if path.get_number() == 90 and ghost.get_state() == "e":
-                        self._turn_ghost(ghost, "d")
-                    elif path.get_number() == 91:
-                        self._turn_ghost(ghost, "r")
-                        ghost.set_direction("s")
-                    elif path.get_number() == 93:
-                        self._turn_ghost(ghost, "l")
-                        ghost.set_direction("s")
-
-                    elif path.get_number() == 92 and (ghost.get_state() == "e" or direction == "s"):
-                        if ghost.get_name() == "Blinky":
-                            ghost.set_animation(blinky_ani)
-                        elif ghost.get_name() == "Pinky":
-                            ghost.set_animation(pinky_ani)
-                        elif ghost.get_name() == "Inky":
-                            ghost.set_animation(inky_ani)
-                        elif ghost.get_name() == "Clyde":
-                            ghost.set_animation(clyed_ani)
-
-                        self._turn_ghost(ghost, "u")
-                        ghost.set_direction("s")
-                        ghost.set_state("g")
-                    else:
-                        if ghost.get_state() == "e":
-                            if path.get_number() in [37, 49, 56]:
-                                direction = "r"
-                            elif path.get_number() in [36, 42, 55]:
-                                direction = "l"
-                            else:
-                                direction = self._return_home(travel_x, travel_y, prev_direction, directions)
+                if ghost_x == 242 and ghost_y == 229 + FIELD_TOP:
+                    self._turn_ghost(ghost, "l")
+                    ghost.set_state("start")
                             
+                if ghost.get_state() == "dead":
+                    target = Point(210, 170 + FIELD_TOP)
+                    travel_x = ghost_x - target.get_x()
+                    travel_y = ghost_y - target.get_y()
+
+                for path in paths:
+
+                    path_body = path.get_body()
+                    directions = path.get_directions()
+
+                    if self._physics_service.has_collided(ghost_body, path_body):
+                        prev_direction = direction
+
+                        if path.get_number() == 90 and ghost.get_state() == "dead":
+                            self._turn_ghost(ghost, "d")
+                        elif path.get_number() == 91:
+                            self._turn_ghost(ghost, "r")
+                            ghost.set_state("start")
+                        elif path.get_number() == 93:
+                            self._turn_ghost(ghost, "l")
+                            ghost.set_state("start")
+
+                        elif path.get_number() == 92 and (ghost.get_state() in ["start", "dead"]):
+                            if ghost.get_name() == "Blinky":
+                                ghost.set_animation(blinky_ani)
+                            elif ghost.get_name() == "Pinky":
+                                ghost.set_animation(pinky_ani)
+                            elif ghost.get_name() == "Inky":
+                                ghost.set_animation(inky_ani)
+                            elif ghost.get_name() == "Clyde":
+                                ghost.set_animation(clyed_ani)
+
+                            self._turn_ghost(ghost, "u")
+                            ghost.set_state("start")
                         else:
-                            direction = directions[randint(0, len(directions)-1)]
-                            while self._is_opposite(prev_direction, direction):
+                            if ghost.get_state() == "dead":
+                                if path.get_number() in [37, 49, 56]:
+                                    direction = "r"
+                                elif path.get_number() in [36, 42, 55]:
+                                    direction = "l"
+                                else:
+                                    direction = self._return_home(travel_x, travel_y, prev_direction, directions)
+                                
+                            else:
                                 direction = directions[randint(0, len(directions)-1)]
-                        self._turn_ghost(ghost, direction)
-                        
-                        if direction not in directions:
-                            ghost_body.set_velocity(Point(0, 0))
+                                while self._is_opposite(prev_direction, direction):
+                                    direction = directions[randint(0, len(directions)-1)]
+                            print(prev_direction, direction)
+                            self._turn_ghost(ghost, direction)
+                            
+                            if direction not in directions:
+                                ghost_body.set_velocity(Point(0, 0))
                         
                     
     def _turn_ghost(self, ghost, direction):

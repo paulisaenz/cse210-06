@@ -20,8 +20,8 @@ class Ghost(Actor):
         self._animations = animation
         self._name = name
         self._animation = self._animations[0]
-        self._direction = "s"
-        self._state = "g"
+        self._direction = ""
+        self._state = "wait"
 
     def get_name(self):
         """Gets the name of ghost.
@@ -128,22 +128,10 @@ class Ghost(Actor):
         """Sets the direction of the ghost."""
         self._direction = direction
 
-    def release(self, direction=""):
-        """Release the Ghost in a given direction."""
-        if direction == "up":
-            velocity = Point(0, -GHOST_VELOCITY)
-            self._animation = self._animations[DIR_UP]
-        elif direction == "right":
-            velocity = Point(GHOST_VELOCITY, 0)
-            self._animation = self._animations[DIR_RIGHT]
-        elif direction == "down":
-            velocity = Point(0, GHOST_VELOCITY)
-            self._animation = self._animations[DIR_DOWN]
-        elif direction == "left":
-            velocity = Point(-GHOST_VELOCITY, 0)
-            self._animation = self._animations[DIR_LEFT]
-        else: 
-            velocity = self._body.get_velocity()
-            self._animation = self._animations[DIR_RIGHT]
+    def release(self):
+        """Releases the Ghost."""
+        self._state = "start"
+        velocity = self._body.get_velocity()
+        self._animation = self._animations[DIR_RIGHT]
             
         self._body.set_velocity(velocity)
