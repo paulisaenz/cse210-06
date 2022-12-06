@@ -15,6 +15,8 @@ class CollideGhostAction(Action):
         pacman = cast.get_first_actor(PACMAN_GROUP)
         pacman_body = pacman.get_body()
 
+        stats = cast.get_first_actor(STATS_GROUP)
+
         eye_ani = []
         eye_ani.append(Animation(EYE_IMAGES["up"], GHOST_RATE))
         eye_ani.append(Animation(EYE_IMAGES["right"], GHOST_RATE))
@@ -25,9 +27,11 @@ class CollideGhostAction(Action):
             
             ghost_body = ghost.get_body()
             if self._physics_service.has_collided(ghost_body, pacman_body):
-                if ghost.get_state() == "g":
+                if ghost.get_state() == "s":
                     sound = Sound(BOUNCE_SOUND)
                     self._audio_service.play_sound(sound)
-
-                ghost.set_state("e")
-                ghost.set_animation(eye_ani)
+                    stats.add_points(GHOST_POINTS)
+                    ghost.set_state("e")
+                    ghost.set_animation(eye_ani)
+                elif ghost.get_state() == "g":
+                    stats.lose_life()
