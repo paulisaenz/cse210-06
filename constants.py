@@ -31,6 +31,9 @@ BOUNCE_SOUND = "assets/sounds/boing.wav"
 CHOMP_SOUND = "assets/sounds/credit.wav"
 WELCOME_SOUND = "assets/sounds/start.wav"
 OVER_SOUND = "assets/sounds/over.wav"
+EAT_GHOST_SOUND = "assets/sounds/eat_ghost.wav"
+POWER_PELLET_SOUND = "assets/sounds/power_pellet.wav"
+DEAD_SOUND = "assets/sounds/death_1.wav"
 
 # TEXT
 ALIGN_CENTER = 0

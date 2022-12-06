@@ -35,7 +35,8 @@ class CollideGhostAction(Action):
 
                     ghost.set_state("dead")
                     ghost.set_animation(eye_ani)
-                    
+
                 elif ghost.get_state() == "ghost":
-                    sound = Sound(BOUNCE_SOUND)
+                    sound = Sound(DEAD_SOUND)
+                    self._audio_service.play_sound(sound)
                     stats.lose_life()
