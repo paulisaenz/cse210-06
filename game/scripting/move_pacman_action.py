@@ -16,11 +16,12 @@ class MovePacmanAction(Action):
         x = position.get_x()
         
         position = position.add(velocity)
+        y = position.get_y()
 
         if x < 0:
-            position = Point(SCREEN_WIDTH - PACMAN_WIDTH, position.get_y())
+            position = Point(SCREEN_WIDTH - PACMAN_WIDTH, y)
         elif x > (SCREEN_WIDTH - PACMAN_WIDTH):
-            position = Point(0, position.get_y())
+            position = Point(0, y)
             
         body.set_position(position)
         
