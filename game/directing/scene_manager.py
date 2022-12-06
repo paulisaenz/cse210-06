@@ -20,7 +20,7 @@ from game.scripting.collide_ghost_action import CollideGhostAction
 from game.scripting.control_pacman_action import ControlPacmanAction
 from game.scripting.control_ghost_action import ControlGhostAction
 from game.scripting.draw_ghost_action import DrawGhostAction
-from game.scripting.draw_bricks_action import DrawBricksAction
+from game.scripting.draw_bg_action import DrawBGAction
 from game.scripting.draw_pellets_action import DrawPelletsAction
 from game.scripting.draw_dialog_action import DrawDialogAction
 from game.scripting.draw_hud_action import DrawHudAction
@@ -55,7 +55,7 @@ class SceneManager:
     CONTROL_PACMAN_ACTION = ControlPacmanAction(KEYBOARD_SERVICE, PHYSICS_SERVICE)
     CONTROL_GHOST_ACTION = ControlGhostAction(PHYSICS_SERVICE)
     DRAW_GHOST_ACTION = DrawGhostAction(VIDEO_SERVICE)
-    DRAW_BRICKS_ACTION = DrawBricksAction(VIDEO_SERVICE)
+    DRAW_BG_ACTION = DrawBGAction(VIDEO_SERVICE)
     DRAW_PELLETS_ACTION = DrawPelletsAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
     DRAW_HUD_ACTION = DrawHudAction(VIDEO_SERVICE)
@@ -68,6 +68,7 @@ class SceneManager:
     RELEASE_DEVICES_ACTION = ReleaseDevicesAction(AUDIO_SERVICE, VIDEO_SERVICE)
     START_DRAWING_ACTION = StartDrawingAction(VIDEO_SERVICE)
     UNLOAD_ASSETS_ACTION = UnloadAssetsAction(AUDIO_SERVICE, VIDEO_SERVICE)
+    change = ""
 
     def __init__(self):
         pass
@@ -93,7 +94,6 @@ class SceneManager:
         self._add_level(cast)
         self._add_lives(cast)
         self._add_score(cast)
-        self._add_wall(cast)
         self._add_pellet(cast)
         self._add_path(cast)
         self._add_background(cast)
@@ -113,23 +113,25 @@ class SceneManager:
         self._add_release_script(script)
         
     def _prepare_next_level(self, cast, script):
-        self._add_wall(cast)
-        self._add_pellet(cast)
-        self._add_path(cast)
-        self._add_background(cast)
-        self._add_pacman(cast, Point(210, 362))
+        cast.clear_actors(GHOST_GROUP)
         self._add_ghost(cast, "Blinky", BLINKY_IMAGES, Point(210, 170))
         self._add_ghost(cast, "Pinky", PINKY_IMAGES, Point(210, 229))
         self._add_ghost(cast, "Inky", INKY_IMAGES, Point(178, 229))
         self._add_ghost(cast, "Clyde", CLYDE_IMAGES, Point(242, 229))
+        self._add_pellet(cast)
+        self._add_pacman(cast, Point(210, 362))
+        self._add_path(cast)
+        self._add_background(cast)
         self._add_dialog(cast, PREP_TO_LAUNCH)
 
+
         script.clear_actions(INPUT)
-        script.add_action(INPUT, TimedChangeSceneAction(IN_PLAY, 2))
+        self.change = script.add_action(INPUT, TimedChangeSceneAction(IN_PLAY, 2))
         self._add_output_script(script)
         script.add_action(OUTPUT, PlaySoundAction(self.AUDIO_SERVICE, WELCOME_SOUND))
         
     def _prepare_try_again(self, cast, script):
+        cast.clear_actors(GHOST_GROUP)
         self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, "Blinky", BLINKY_IMAGES, Point(210, 170))
         self._add_ghost(cast, "Pinky", PINKY_IMAGES, Point(210, 229))
@@ -143,7 +145,7 @@ class SceneManager:
         self._add_output_script(script)
 
     def _prepare_in_play(self, cast, script):
-        self._activate_ball(cast)
+        self._activate_ghosts(cast)
         cast.clear_actors(DIALOG_GROUP)
 
         script.clear_actions(INPUT)
@@ -152,6 +154,7 @@ class SceneManager:
         self._add_output_script(script)
 
     def _prepare_game_over(self, cast, script):
+        cast.clear_actors(GHOST_GROUP)
         self._add_pacman(cast, Point(210, 362))
         self._add_ghost(cast, "Blinky", BLINKY_IMAGES, Point(210, 170))
         self._add_ghost(cast, "Pinky", PINKY_IMAGES, Point(210, 229))
@@ -168,7 +171,7 @@ class SceneManager:
     # casting methods
     # ----------------------------------------------------------------------------------------------
     
-    def _activate_ball(self, cast):
+    def _activate_ghosts(self, cast):
         for ghost in cast.get_actors(GHOST_GROUP):
             ghost.release()
 
@@ -183,14 +186,8 @@ class SceneManager:
         animations.append(Animation(image_group["down"], GHOST_RATE))
         animations.append(Animation(image_group["left"], GHOST_RATE))
         ghost = Ghost(body, name, animations)
-        i = 0
-        for ghosts in cast.get_actors(GHOST_GROUP):
-            if ghosts.get_body().get_position().get_x() == ghost.get_body().get_position().get_x() and ghosts.get_body().get_position().get_y() == ghost.get_body().get_position().get_y():
-                i += 1
-        if i == 0:
-            cast.add_actor(GHOST_GROUP, ghost)
+        cast.add_actor(GHOST_GROUP, ghost)
         
-
     def _add_path(self, cast):
         cast.clear_actors(PATH_GROUP)
 
@@ -211,28 +208,6 @@ class SceneManager:
 
                 path = Path(body, directions, number)
                 cast.add_actor(PATH_GROUP, path)
-
-    def _add_wall(self, cast):
-        cast.clear_actors(WALL_GROUP)
-        
-        stats = cast.get_first_actor(STATS_GROUP)
-        level = stats.get_level() % BASE_LEVELS
-        filename = LEVEL_FILE.format(level)
-
-        with open(filename, 'r') as file:
-            reader = csv.reader(file, skipinitialspace=True)
-            for r, row in enumerate(reader):
-                
-                x, y, width, height = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP, int(row[2]), int(row[3])
-                position = Point(x, y)
-                size = Point(width, height)
-                velocity = Point(0, 0)
-                image = Image(WALL_IMAGE)
-
-                body = Body(position, size, velocity)
-
-                wall = Wall(body, image, 0)
-                cast.add_actor(WALL_GROUP, wall)
     
     def _add_pellet(self, cast):
         cast.clear_actors(PELLET_GROUP)
@@ -242,13 +217,18 @@ class SceneManager:
             for r, row in enumerate(reader):
                 
                 x, y = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP
+                type = row[2]
                 position = Point(x, y)
                 size = Point(PELLET_WIDTH, PELLET_HEIGHT)
                 velocity = Point(0, 0)
-                image = Image(PELLET_IMAGE)
+                if type == "n":
+                    image = Image(PELLET_IMAGE)
+                    points = PELLET_POINTS
+                elif type == "p":
+                    image = Image(POWER_PELLET_IMAGE)
+                    points = POWER_PELLET_POINTS
 
                 body = Body(position, size, velocity)
-                points = PELLET_POINTS
 
                 pellet = Pellet(body, image, points)
                 cast.add_actor(PELLET_GROUP, pellet)
@@ -332,7 +312,7 @@ class SceneManager:
         script.add_action(OUTPUT, self.START_DRAWING_ACTION)
         script.add_action(OUTPUT, self.DRAW_HUD_ACTION)
         script.add_action(OUTPUT, self.DRAW_GHOST_ACTION)
-        script.add_action(OUTPUT, self.DRAW_BRICKS_ACTION)
+        script.add_action(OUTPUT, self.DRAW_BG_ACTION)
         script.add_action(OUTPUT, self.DRAW_PELLETS_ACTION)
         script.add_action(OUTPUT, self.DRAW_PACMAN_ACTION)
         script.add_action(OUTPUT, self.DRAW_DIALOG_ACTION)
@@ -348,10 +328,10 @@ class SceneManager:
         
     def _add_update_script(self, script):
         script.clear_actions(UPDATE)
+        script.add_action(UPDATE, self.MOVE_GHOST_ACTION)
         script.add_action(UPDATE, self.MOVE_PACMAN_ACTION)
         script.add_action(UPDATE, self.COLLIDE_GHOST_ACTION)
         script.add_action(UPDATE, self.CONTROL_GHOST_ACTION)
-        script.add_action(UPDATE, self.MOVE_GHOST_ACTION)
         script.add_action(UPDATE, self.COLLIDE_GHOST_ACTION)
         script.add_action(UPDATE, self.COLLIDE_PELLETS_ACTION)
         script.add_action(UPDATE, self.CHECK_OVER_ACTION)

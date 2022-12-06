@@ -6,7 +6,7 @@ from game.casting.color import Color
 # -------------------------------------------------------------------------------------------------- 
 
 # GAME
-GAME_NAME = "Batter"
+GAME_NAME = "PacMan"
 FRAME_RATE = 60
 
 # SCREEN
@@ -164,9 +164,11 @@ WALL_THRESHOLD = PACMAN_VELOCITY*2
 PELLET_GROUP = "pellets"
 PELLET_FILE = "assets/data/pellets.txt"
 PELLET_IMAGE = f"assets/images/pellet.png"
+POWER_PELLET_IMAGE = f"assets/images/power_pellet.png"
 PELLET_WIDTH = 2
 PELLET_HEIGHT = 2
 PELLET_POINTS = 10
+POWER_PELLET_POINTS = 50
 
 PATH_GROUP = "paths"
 PATH_WIDTH = 2
