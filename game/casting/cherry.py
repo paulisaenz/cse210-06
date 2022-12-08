@@ -11,11 +11,24 @@ class Cherry(Actor):
     """
 
     def __init__(self):
-        super().__init__()
-        self.new_score = 0
+        super().__init__(self)
+        self.images = []
+        for i in range(1, 5):
+            img = ('images' + 'cherries' + str(i) + '.png').convert()
+            self.images.append(img)
+            self.image = self.images[0]
+            self.rect = self.image.get_rect()
 
-    def get_score(self):
-        return self.new_score
+            cherries = Cherry() 
+            cherries.rect.x = 0
+            cherries.rect.y = 0
 
-    def add_score(self, score):
-        return score + 100
+
+
+    #def get_score(self):
+        #return self.new_score
+
+    #def add_score(self, score):
+        #return score + 100
+
+    
