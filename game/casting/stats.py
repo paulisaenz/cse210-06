@@ -27,7 +27,6 @@ class Stats(Actor):
 
     def get_level(self):
         """Gets the level.
-
         #Returns:
             #A number representing the level.
         #"""
@@ -35,7 +34,6 @@ class Stats(Actor):
 
     def get_lives(self):
         """Gets the lives.
-
         Returns:
             A number representing the lives.
         """
@@ -48,7 +46,6 @@ class Stats(Actor):
   
     def get_score(self):
         """Gets the score.
-
         Returns:
             A number representing the score.
         """
