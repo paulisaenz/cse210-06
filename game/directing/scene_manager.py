@@ -22,6 +22,7 @@ from game.scripting.control_ghost_action import ControlGhostAction
 from game.scripting.draw_ghost_action import DrawGhostAction
 from game.scripting.draw_bg_action import DrawBGAction
 from game.scripting.draw_pellets_action import DrawPelletsAction
+from game.scripting.draw_cherry_action import DrawCherryAction
 from game.scripting.draw_dialog_action import DrawDialogAction
 from game.scripting.draw_hud_action import DrawHudAction
 from game.scripting.draw_pacman_action import DrawPacmanAction
@@ -57,6 +58,7 @@ class SceneManager:
     DRAW_GHOST_ACTION = DrawGhostAction(VIDEO_SERVICE)
     DRAW_BG_ACTION = DrawBGAction(VIDEO_SERVICE)
     DRAW_PELLETS_ACTION = DrawPelletsAction(VIDEO_SERVICE)
+    DRAW_CHERRY_ACTION = DrawCherryAction(VIDEO_SERVICE)
     DRAW_DIALOG_ACTION = DrawDialogAction(VIDEO_SERVICE)
     DRAW_HUD_ACTION = DrawHudAction(VIDEO_SERVICE)
     DRAW_PACMAN_ACTION= DrawPacmanAction(VIDEO_SERVICE)
@@ -95,6 +97,7 @@ class SceneManager:
         self._add_lives(cast)
         self._add_score(cast)
         self._add_pellet(cast)
+        self._add_cherry(cast)
         self._add_path(cast)
         self._add_background(cast)
         self._add_pacman(cast, Point(210, 362))
@@ -119,6 +122,7 @@ class SceneManager:
         self._add_ghost(cast, "Inky", INKY_IMAGES, Point(178, 229))
         self._add_ghost(cast, "Clyde", CLYDE_IMAGES, Point(242, 229))
         self._add_pellet(cast)
+        self._add_cherry(cast)
         self._add_pacman(cast, Point(210, 362))
         self._add_path(cast)
         self._add_background(cast)
@@ -232,6 +236,27 @@ class SceneManager:
 
                 pellet = Pellet(body, image, points)
                 cast.add_actor(PELLET_GROUP, pellet)
+
+    def _add_cherry(self, cast):
+        cast.clear_actors(CHERRY_GROUP)
+
+        with open(CHERRY_FILE, 'r') as file:
+            reader = csv.reader(file, skipinitialspace=True)
+            for r, row in enumerate(reader):
+                
+                x, y = int(row[0]) + FIELD_LEFT, int(row[1]) + FIELD_TOP
+                type = row[2]
+                position = Point(x, y)
+                size = Point(CHERRY_WIDTH, CHERRY_HEIGHT)
+                velocity = Point(0, 0)
+                if type == "c":
+                    image = Image(CHERRY_IMAGE)
+                    points = CHERRY_POINTS
+
+                    body = Body(position, size, velocity)
+
+                    cherry = Cherry(body, image, points)
+                    cast.add_actor(CHERRY_GROUP, cherry)
     
     def _add_background(self, cast):
         cast.clear_actors(BG_GROUP)
