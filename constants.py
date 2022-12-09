@@ -1,9 +1,9 @@
 import pathlib
 from game.casting.color import Color
 
-# -------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------
 # GENERAL GAME CONSTANTS
-# -------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------
 
 # GAME
 GAME_NAME = "PacMan"
@@ -22,7 +22,7 @@ FIELD_LEFT = 0
 FIELD_RIGHT = SCREEN_WIDTH
 
 # FONT
-FONT_FILE = "assets/fonts/zorque.otf"
+FONT_FILE = "assets/fonts/Tango_Chips.ttf"
 FONT_SMALL = 32
 FONT_LARGE = 48
 
@@ -65,9 +65,9 @@ GAME_OVER = 4
 LEVEL_FILE = "assets/data/level-{:03}.txt"
 BASE_LEVELS = 5
 
-# -------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------
 # SCRIPTING CONSTANTS
-# -------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------
 
 # PHASES
 INITIALIZE = 0
@@ -78,9 +78,9 @@ OUTPUT = 4
 UNLOAD = 5
 RELEASE = 6
 
-# -------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------
 # CASTING CONSTANTS
-# -------------------------------------------------------------------------------------------------- 
+# --------------------------------------------------------------------------------------------------
 
 # STATS
 STATS_GROUP = "stats"
@@ -106,31 +106,31 @@ GHOST_VELOCITY = 2
 GHOST_POINTS = 200
 
 BLINKY_IMAGES = {
-    "up": [f"assets/images/{n:02}.png" for n in range(111,113)],
+    "up": [f"assets/images/{n:02}.png" for n in range(111, 113)],
     "right": [f"assets/images/{n:02}.png" for n in range(121, 123)],
     "down": [f"assets/images/{n:02}.png" for n in range(131, 133)],
     "left": [f"assets/images/{n:02}.png" for n in range(141, 143)]
 }
 
 PINKY_IMAGES = {
-    "up": [f"assets/images/{i:03}.png" for i in range(211,213)],
+    "up": [f"assets/images/{i:03}.png" for i in range(211, 213)],
     "right": [f"assets/images/{i:03}.png" for i in range(221, 223)],
-    "down": [f"assets/images/{i:03}.png" for i in range(231,233)],
-    "left": [f"assets/images/{i:03}.png" for i in range(241,243)]
+    "down": [f"assets/images/{i:03}.png" for i in range(231, 233)],
+    "left": [f"assets/images/{i:03}.png" for i in range(241, 243)]
 }
 
 INKY_IMAGES = {
-    "up": [f"assets/images/{i:03}.png" for i in range(311,313)],
+    "up": [f"assets/images/{i:03}.png" for i in range(311, 313)],
     "right": [f"assets/images/{i:03}.png" for i in range(321, 323)],
-    "down": [f"assets/images/{i:03}.png" for i in range(331,333)],
-    "left": [f"assets/images/{i:03}.png" for i in range(341,343)]
+    "down": [f"assets/images/{i:03}.png" for i in range(331, 333)],
+    "left": [f"assets/images/{i:03}.png" for i in range(341, 343)]
 }
 
 CLYDE_IMAGES = {
-    "up": [f"assets/images/{i:03}.png" for i in range(411,413)],
+    "up": [f"assets/images/{i:03}.png" for i in range(411, 413)],
     "right": [f"assets/images/{i:03}.png" for i in range(421, 423)],
-    "down": [f"assets/images/{i:03}.png" for i in range(431,433)],
-    "left": [f"assets/images/{i:03}.png" for i in range(441,443)]
+    "down": [f"assets/images/{i:03}.png" for i in range(431, 433)],
+    "left": [f"assets/images/{i:03}.png" for i in range(441, 443)]
 }
 
 SCARED_IMAGES = {
