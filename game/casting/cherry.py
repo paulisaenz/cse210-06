@@ -1,34 +1,45 @@
-from random import randint 
-from constants import *
 from game.casting.actor import Actor
-from game.casting.point import Point
+
 
 class Cherry(Actor):
-    """
-    Responsibility: Exist as an actor, and add to the score when touched
-    Specifics -
-        Make a method that takes the current score, adds one to it, and returns the new score
-    """
+    """An object to engage with PacMan."""
 
-    def __init__(self):
-        super().__init__(self)
-        self.images = []
-        for i in range(1, 5):
-            img = ('images' + 'cherries' + str(i) + '.png').convert()
-            self.images.append(img)
-            self.image = self.images[0]
-            self.rect = self.image.get_rect()
+    def __init__(self, body, image, points, debug = False):
+        """Constructs a new cherry.
+        
+        Args:
+            body: A new instance of Body.
+            image: A new instance of Image.
+            points: The number of points the cherry is worth
+            debug: If it is being debugged. 
+        """
+        super().__init__(debug)
+        self._body = body
+        self._image = image
+        self._points = points
 
-            cherries = Cherry() 
-            cherries.rect.x = 0
-            cherries.rect.y = 0
+    def get_image(self):
+        """Gets the cherry image.
+        
+        Returns:
+            An instance of Image.
+        """
+        return self._image
 
+    def get_body(self):
+        """Gets the cherry body.
+        
+        Returns:
+            An instance of Body.
+        """
+        return self._body
 
-
-    #def get_score(self):
-        #return self.new_score
-
-    #def add_score(self, score):
-        #return score + 100
+    def get_points(self):
+        """Gets the cherry points.
+        
+        Returns:
+            A number representing the cherry's points.
+        """
+        return self._points
 
     
