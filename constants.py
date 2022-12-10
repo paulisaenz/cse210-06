@@ -22,7 +22,7 @@ FIELD_LEFT = 0
 FIELD_RIGHT = SCREEN_WIDTH
 
 # FONT
-FONT_FILE = "assets/fonts/Tango_Chips.ttf"
+FONT_FILE = "assets/fonts/zoroque.otf"
 FONT_SMALL = 32
 FONT_LARGE = 48
 
