@@ -48,6 +48,7 @@ class CollidePelletsAction(Action):
         clyed_ani.append(Animation(CLYDE_IMAGES["left"], GHOST_RATE))
 
         for ghost in ghosts:
+            # scared ghost countdown will be 10 seconds
             if ghost.get_state() == "scared":
                 self._scared_ghost_countdown = self._scared_ghost_countdown - 1
                 print(self._scared_ghost_countdown)
@@ -61,7 +62,6 @@ class CollidePelletsAction(Action):
                         ghost.set_animation(inky_ani)
                     elif ghost.get_name() == "Clyde":
                         ghost.set_animation(clyed_ani)
-                    # self._scared_ghost_countdown = 100
 
         for pellet in pellets:
 
