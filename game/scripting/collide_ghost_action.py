@@ -9,7 +9,7 @@ class CollideGhostAction(Action):
     def __init__(self, physics_service, audio_service):
         self._physics_service = physics_service
         self._audio_service = audio_service
-        
+
     def execute(self, cast, script, callback):
         ghosts = cast.get_actors(GHOST_GROUP)
         pacman = cast.get_first_actor(PACMAN_GROUP)
@@ -24,7 +24,7 @@ class CollideGhostAction(Action):
         eye_ani.append(Animation(EYE_IMAGES["left"], GHOST_RATE))
 
         for ghost in ghosts:
-            
+
             ghost_body = ghost.get_body()
             if self._physics_service.has_collided(ghost_body, pacman_body):
                 if ghost.get_state() == "scared":
